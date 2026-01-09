@@ -5,7 +5,7 @@ import bcrypt
 import jwt
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, Request, Depends
 from app.core.config import settings
 from app.core.database import get_database
 import logging
