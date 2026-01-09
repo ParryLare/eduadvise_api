@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: eduadvise-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=eduadvise
+      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - eduadvise-network
+    
+  mongodb:
+    image: mongo:7
+    container_name: eduadvise-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=eduadvise
+    restart: unless-stopped
+    networks:
+      - eduadvise-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  eduadvise-network:
+    driver: bridge
